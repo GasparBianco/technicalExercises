@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 public class MapTest {
 
     @Test
-    public void shouldcreateADefaultMapWithXAndYInt(){
+    public void shouldCreateADefaultMapWithXAndYInt(){
         Map map = new Map();
         Assertions.assertNotNull(map.getX());
         Assertions.assertNotNull(map.getY());
@@ -38,9 +38,47 @@ public class MapTest {
         for (int[] data : testData) {
             int x = data[0];
             int y = data[1];
-            Assertions.assertThrows(IllegalArgumentException.class, () -> {
-                new Map(x, y);
-            });
+            Assertions.assertThrows(IllegalArgumentException.class, () -> new Map(x, y));
         }
+    }
+    @Test
+    public void createRandomObstacleShouldCreateOneNewObstacle(){
+        Map map = new Map();
+        Assertions.assertEquals(0,map.getObstacles().size());
+        map.createRandomObstacle();
+        Assertions.assertEquals(1,map.getObstacles().size());
+        map.createRandomObstacle();
+        Assertions.assertEquals(2,map.getObstacles().size());
+    }
+    @Test
+    public void theObstaclesHaveToBeInsideTheMap(){
+        Map map = new Map(1,1);
+        map.createRandomObstacle();
+        for(int i=0; i<=100; i++){ //This loop is because the obstacle is generated in random position
+            Assertions.assertTrue(map.getObstacles().get(0)[0] <= 1 &&
+                    map.getObstacles().get(0)[1] <=1 &&
+                    map.getObstacles().get(0)[0] >=0 &&
+                    map.getObstacles().get(0)[1] >=0);
+        }
+    }
+    @Test
+    public void ifMapIsFullOfObstaclesShouldThrowAnException(){
+        Map map = new Map(1,1);
+        map.createRandomObstacle();
+        map.createRandomObstacle();
+        map.createRandomObstacle();
+        map.createRandomObstacle();
+        Assertions.assertThrows(RuntimeException.class, map::createRandomObstacle);
+    }
+    @Test
+    public void createAnObstacleHaveToCreateANewObstacle(){
+        Map map = new Map();
+        int[] coords = {2,3};
+        map.createCustomObstacle(coords);
+        Assertions.assertEquals(1,map.getObstacles().size());
+        Assertions.assertArrayEquals(coords, map.getObstacles().get(0));
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            map.createCustomObstacle(coords);
+        });
     }
 }
