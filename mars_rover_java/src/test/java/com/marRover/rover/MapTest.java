@@ -103,4 +103,23 @@ public class MapTest {
         Assertions.assertEquals(0,map.getObstacles().size());
 
     }
+    @Test
+    public void shouldNotBeAbleToCreateObstaclesWhenRover(){
+        Map map = new Map();
+        Rover rover = new Rover(map);
+        Assertions.assertThrows(IllegalCallerException.class, () -> {
+            map.createCustomObstacle(1,1);
+        });
+        Assertions.assertThrows(IllegalCallerException.class, map::createRandomObstacle);
+    }
+    @Test
+    public void shouldNotBeAbleToDeleteObstaclesWhenRover(){
+        Map map = new Map();
+        map.createCustomObstacle(2,3);
+        Rover rover = new Rover(map);
+        Assertions.assertThrows(IllegalCallerException.class, () -> {
+            map.deleteCustomObstacle(2,3);
+        });
+        Assertions.assertThrows(IllegalCallerException.class, map::deleteRandomObstacle);
+    }
 }

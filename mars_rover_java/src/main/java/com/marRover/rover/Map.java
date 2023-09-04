@@ -7,6 +7,8 @@ import java.util.Random;
 public class Map {
     private final int x;
     private final int y;
+
+    private  boolean rover = false;
     private ArrayList<int[]> obstacles = new ArrayList<>();
     public Map(int x, int y) {
         if (x <= 0 || y <= 0) {
@@ -20,6 +22,9 @@ public class Map {
         this.y = 10;
     }
     public void deleteRandomObstacle() {
+        if (rover){
+            throw new IllegalCallerException("No se pueden editar los obstaculos cuando ya hay un rover desplegado");
+        }
         if (obstacles.isEmpty()){
             throw new NullPointerException("No existe ningun obstaculo actualmente");
         }else{
@@ -29,6 +34,9 @@ public class Map {
         }
     }
     public void deleteCustomObstacle(int x, int y){
+        if (rover){
+            throw new IllegalCallerException("No se pueden editar los obstaculos cuando ya hay un rover desplegado");
+        }
         int[] coords = new int[2];
         coords[0] = x;
         coords[1] = y;
@@ -41,6 +49,9 @@ public class Map {
         throw new NullPointerException("No existe ningun obstaculo en las coordenadas otorgadas");
     }
     public void createCustomObstacle(int x, int y) {
+        if (rover){
+            throw new IllegalCallerException("No se pueden editar los obstaculos cuando ya hay un rover desplegado");
+        }
         int[] coords = new int[2];
         coords[0] = x;
         coords[1] = y;
@@ -53,6 +64,9 @@ public class Map {
         }
     }
     public void createRandomObstacle(){
+        if (rover){
+            throw new IllegalCallerException("No se pueden editar los obstaculos cuando ya hay un rover desplegado");
+        }
         int [] coords = new int[2];
         Random random = new Random();
         coords[0] = random.nextInt(this.getX()+1);
@@ -66,7 +80,7 @@ public class Map {
         }
     }
 
-    private boolean checkEmptyObstaclePosition(int[] coords){
+    public boolean checkEmptyObstaclePosition(int[] coords){
         boolean check = true;
         for (int[] obstacle : obstacles) {
             if (Arrays.equals(coords, obstacle)) {
@@ -77,7 +91,7 @@ public class Map {
         return check;
     }
 
-    private int[] findEmptyCoordinate() {
+    public int[] findEmptyCoordinate() {
         for (int i = 0; i <= x; i++) {
             for (int j = 0; j <= y; j++) {
                 int[] coords = {i, j};
@@ -98,5 +112,12 @@ public class Map {
     }
     public int getX() {
         return x;
+    }
+    public boolean isRover() {
+        return rover;
+    }
+
+    public void setRover(boolean rover) {
+        this.rover = rover;
     }
 }
