@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class MapTest {
-
     @Test
     public void shouldCreateADefaultMapWithXAndYInt(){
         Map map = new Map();
